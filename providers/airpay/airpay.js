@@ -1,13 +1,13 @@
-import moment from "moment";
-import sha256 from "sha256";
+const moment = require("moment");
+const sha256 = require("sha256");
 
 class AirpayProvider {
   constructor(config) {
-    this.#validateConfig(config);
+    this._validateConfig(config);
     this.config = config;
   }
 
-  #validateConfig(config) {
+  _validateConfig(config) {
     const requiredFields = ["AIRPAY_PG_MID", "AIRPAY_PG_USER_NAME", "AIRPAY_PG_PASSWORD", "AIRPAY_PG_SECRET", "DOMAIN_URL"];
 
     for (const field of requiredFields) {
@@ -20,7 +20,7 @@ class AirpayProvider {
 
   async processPayment(payload) {
     try {
-      this.#validatePayload(payload);
+      this._validatePayload(payload);
   
       const {
         customer: { email, firstName, lastName },
@@ -54,11 +54,11 @@ class AirpayProvider {
         },
       };
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
     }
   }
 
-  #validatePayload(payload) {
+  _validatePayload(payload) {
     const requiredFields = ["order", "mid", "privatekey", "checksum", "merDomain"];
     const orderRequiredFields = ["amount", "number", "chmod", "paymentUrl"];
     const customerRequiredFields = ["amount", "number", "chmod", "paymentUrl"];
@@ -79,4 +79,4 @@ class AirpayProvider {
   }
 }
 
-export default AirpayProvider;
+module.exports = AirpayProvider;
