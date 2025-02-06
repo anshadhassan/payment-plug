@@ -33,7 +33,6 @@ class PaymentGateway {
     }
 
     const response = await this.providerInstance.processPayment(payload);
-    console.log("response=>", response);
     return response;
   }
 }

@@ -20,16 +20,17 @@ class AirpayProvider {
 
   async processPayment(payload) {
     try {
+
       this._validatePayload(payload);
+
+      const {
+        AIRPAY_PG_SECRET, AIRPAY_PG_USER_NAME, AIRPAY_PG_PASSWORD, DOMAIN_URL, AIRPAY_PG_MID
+      } = this.config;
   
       const {
         customer: { email, firstName, lastName },
         order: { amount, number, chmod },
       } = payload;
-    
-      const {
-        AIRPAY_PG_SECRET, AIRPAY_PG_USER_NAME, AIRPAY_PG_PASSWORD, DOMAIN_URL, AIRPAY_PG_MID
-      } = this.config;
 
       const dataString = `${email}${firstName}${lastName}${amount}${number}${moment().format('YYYY-MM-DD')}`;
     
@@ -55,13 +56,14 @@ class AirpayProvider {
       };
     } catch (error) {
       console.log("error", error);
+      throw new Error(error)
     }
   }
 
   _validatePayload(payload) {
-    const requiredFields = ["order", "mid", "privatekey", "checksum", "merDomain"];
-    const orderRequiredFields = ["amount", "number", "chmod", "paymentUrl"];
-    const customerRequiredFields = ["amount", "number", "chmod", "paymentUrl"];
+    const requiredFields = ["order"];
+    const orderRequiredFields = ["amount", "number"];
+    const customerRequiredFields = ["email", "firstName", "lastName", "mobileNumber"];
 
     for (const field of requiredFields) {
       if (!payload[field]) {
@@ -72,6 +74,12 @@ class AirpayProvider {
     for (const field of orderRequiredFields) {
       if (!payload.order[field]) {
         throw new Error(`Airpay order payload missing: ${field}`);
+      }
+    }
+
+    for (const field of customerRequiredFields) {
+      if (!payload.customer[field]) {
+        throw new Error(`Airpay customer payload missing: ${field}`);
       }
     }
 
