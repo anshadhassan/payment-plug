@@ -34,7 +34,7 @@ class AirpayProvider {
   
       const dataString = chmod === 'upi' ? 
         `${email}${firstName}${lastName}${amount}${number}${moment().format('YYYY-MM-DD')}` :
-        `${email}${firstName}${lastName}${amount}${number}${sb_nextrundate}${number}${sb_period}${sb_frequency}${sb_amount}${sb_isrecurring}${sb_recurringcount}${sb_retryattempts}${moment().format('YYYY-MM-DD')}`;
+        `${email}${firstName}${lastName}${amount}${number}${sb_nextrundate}${sb_period}${sb_frequency}${sb_amount}${sb_isrecurring}${sb_recurringcount}${sb_retryattempts}${moment().format('YYYY-MM-DD')}`;
       
       const privatekey = sha256(`${AIRPAY_PG_SECRET}@${AIRPAY_PG_USER_NAME}:|:${AIRPAY_PG_PASSWORD}`);
     
