@@ -12,4 +12,6 @@ coverage
 .npmrc
 .vscode
 .env
+.editorconfig
+.eslintrc.js
 
