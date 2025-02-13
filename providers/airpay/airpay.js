@@ -41,6 +41,12 @@ class AirpayProvider {
       const keySha256 = sha256(`${AIRPAY_PG_USER_NAME}~:~${AIRPAY_PG_PASSWORD}`);
     
       const checksum = sha256(`${keySha256}@${dataString}`);
+      const orderObj = chmod === 'upi' ?
+      {} : 
+      {
+        sb_nextrundate, sb_period, sb_frequency, sb_amount,
+        sb_retryattempts, sb_isrecurring, sb_recurringcount
+      }
 
       return {
         data: {
@@ -49,6 +55,7 @@ class AirpayProvider {
             number,
             chmod,
             paymentUrl: `${DOMAIN_URL}/v1/01/customer/payment/order/checkout?number=${number}`,
+            ...orderObj
           },
           mid: AIRPAY_PG_MID,
           privatekey,
